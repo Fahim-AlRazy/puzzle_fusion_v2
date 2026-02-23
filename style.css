@@ -241,22 +241,32 @@ body {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* BUCC LOGO */
-.bucc-logo-container {
+/* BOTTOM LOGOS WRAPPER */
+.bottom-logos {
   position: absolute;
   bottom: clamp(15px, 4vh, 40px);
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 20px);
+  z-index: 5;
+  animation: fadeInLogo 0.8s ease-out 0.3s backwards;
+}
+
+/* BUCC LOGO */
+.bucc-logo-container {
   background: rgba(135, 206, 250, 0.4);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  padding: clamp(10px, 2vw, 20px) clamp(15px, 3vw, 30px);
+  padding: clamp(8px, 1.5vw, 16px) clamp(12px, 2.5vw, 24px);
   border-radius: 20px;
   border: 2px solid rgba(135, 206, 250, 0.5);
   box-shadow: 0 10px 40px rgba(135, 206, 250, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  animation: fadeInLogo 0.8s ease-out 0.3s backwards;
-  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes fadeInLogo {
@@ -273,20 +283,15 @@ body {
 
 /* AURA IMAGE */
 .aura-image {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: clamp(280px, 60vw, 700px);
-  height: auto;
-  max-width: 20%;
+  height: clamp(50px, 8vw, 90px);
+  width: auto;
   pointer-events: none;
-  opacity: 0.85;
-  z-index: 0;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+  transition: all 0.3s ease;
 }
 
 .bucc-logo {
-  height: clamp(40px, 8vw, 80px);
+  height: clamp(40px, 7vw, 70px);
   width: auto;
   display: block;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
@@ -296,6 +301,14 @@ body {
 .bucc-logo-container:hover .bucc-logo {
   transform: scale(1.1);
   filter: drop-shadow(0 6px 15px rgba(135, 206, 250, 0.5));
+}
+
+/* Standalone BUCC logo (result screen) */
+#resultScreen>.bucc-logo-container {
+  position: absolute;
+  bottom: clamp(15px, 4vh, 40px);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* INSTRUCTIONS SCREEN */
