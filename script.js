@@ -839,13 +839,16 @@ const PARTICLE_CONFIG = {
   MAX_SPEED: 1.0,
   MIN_OPACITY: 0.15,
   MAX_OPACITY: 0.45,
+  CONNECTION_DIST: 150,
 };
 
 const LANG_SYMBOLS = [
   "{ }", "</>", "py", "JS", "C++", "C#",
-  "Go", "λ", "Rb", "Rs", "0x", "//",
-  "SQL", "PHP", "TS", "R", "§", ">>",
-  "fn()", "[ ]", "&&", "!=", ">>>", "**",
+  "Go", "λ", "SQL", "PHP", "TS", "fn()",
+  "Bangla", "English", "Arabic", "Chinese",
+  "Japanese", "Korean", "Hindi", "French",
+  "Spanish", "German", "বাংলা", "العربية",
+  "中文", "日本語", "한국어", "русский",
 ];
 
 const PARTICLE_COLORS = [
@@ -911,12 +914,37 @@ function createParticles() {
   }
 }
 
+function drawConnections(ctx) {
+  const maxDist = PARTICLE_CONFIG.CONNECTION_DIST;
+
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < maxDist) {
+        const opacity = (1 - dist / maxDist) * 0.2;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
 function animateParticles() {
   const ctx = particleCtx;
   const w = particleCanvas.width;
   const h = particleCanvas.height;
 
   ctx.clearRect(0, 0, w, h);
+
+  // Draw connection lines first (behind particles)
+  drawConnections(ctx);
 
   particles.forEach((p) => {
     // Update position
