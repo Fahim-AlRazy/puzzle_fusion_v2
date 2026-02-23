@@ -747,3 +747,171 @@ function clearChildren(element) {
     element.removeChild(element.firstChild);
   }
 }
+
+// ═══════════════════════════════════════
+//  TITLE LANGUAGE CYCLING
+// ═══════════════════════════════════════
+
+const TITLE_VARIANTS = [
+  "PUZZLE_FUSION_V2",
+  "拼图融合_V2",
+  "পাজল_ফিউশন_V2",
+  "0x50 55 5A 5A 4C 45",
+  "PUZZLE_FUSION_V2",
+  "퍼즐_퓨전_V2",
+  "パズル融合_V2",
+  "01010000 01010101",
+];
+
+let titleIndex = 0;
+let titleInterval = null;
+
+function startTitleCycling() {
+  const titleEl = document.querySelector(".game-title");
+  if (!titleEl) return;
+
+  titleInterval = setInterval(() => {
+    titleEl.classList.add("fade-out");
+    titleEl.classList.remove("fade-in");
+
+    setTimeout(() => {
+      titleIndex = (titleIndex + 1) % TITLE_VARIANTS.length;
+      titleEl.textContent = TITLE_VARIANTS[titleIndex];
+      titleEl.classList.remove("fade-out");
+      titleEl.classList.add("fade-in");
+    }, 400);
+  }, 2500);
+}
+
+// ═══════════════════════════════════════
+//  PARTICLE CANVAS BACKGROUND
+// ═══════════════════════════════════════
+
+const PARTICLE_CONFIG = {
+  COUNT: 45,
+  MIN_SIZE: 12,
+  MAX_SIZE: 28,
+  MIN_SPEED: 0.3,
+  MAX_SPEED: 1.0,
+  MIN_OPACITY: 0.15,
+  MAX_OPACITY: 0.45,
+};
+
+const LANG_SYMBOLS = [
+  "{ }", "</>", "py", "JS", "C++", "C#",
+  "Go", "λ", "Rb", "Rs", "0x", "//",
+  "SQL", "PHP", "TS", "R", "§", ">>",
+  "fn()", "[ ]", "&&", "!=", ">>>", "**",
+];
+
+const RED_SHADES = [
+  "rgba(220, 38, 38, ",   // red-600
+  "rgba(239, 68, 68, ",   // red-500
+  "rgba(248, 113, 113, ", // red-400
+  "rgba(185, 28, 28, ",   // red-700
+  "rgba(252, 165, 165, ", // red-300
+  "rgba(255, 100, 80, ",  // coral red
+  "rgba(200, 50, 50, ",   // dark red
+];
+
+let particles = [];
+let particleCanvas = null;
+let particleCtx = null;
+let animFrameId = null;
+
+function initParticleSystem() {
+  particleCanvas = document.getElementById("particleCanvas");
+  if (!particleCanvas) return;
+
+  particleCtx = particleCanvas.getContext("2d");
+  resizeCanvas();
+  createParticles();
+  animateParticles();
+
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    createParticles();
+  });
+}
+
+function resizeCanvas() {
+  particleCanvas.width = window.innerWidth;
+  particleCanvas.height = window.innerHeight;
+}
+
+function createParticles() {
+  particles = [];
+  const w = particleCanvas.width;
+  const h = particleCanvas.height;
+
+  for (let i = 0; i < PARTICLE_CONFIG.COUNT; i++) {
+    const size =
+      PARTICLE_CONFIG.MIN_SIZE +
+      Math.random() * (PARTICLE_CONFIG.MAX_SIZE - PARTICLE_CONFIG.MIN_SIZE);
+
+    particles.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * PARTICLE_CONFIG.MAX_SPEED * 2,
+      vy:
+        -(PARTICLE_CONFIG.MIN_SPEED +
+          Math.random() * (PARTICLE_CONFIG.MAX_SPEED - PARTICLE_CONFIG.MIN_SPEED)),
+      size: size,
+      opacity:
+        PARTICLE_CONFIG.MIN_OPACITY +
+        Math.random() * (PARTICLE_CONFIG.MAX_OPACITY - PARTICLE_CONFIG.MIN_OPACITY),
+      symbol: LANG_SYMBOLS[Math.floor(Math.random() * LANG_SYMBOLS.length)],
+      color: RED_SHADES[Math.floor(Math.random() * RED_SHADES.length)],
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.02,
+      pulsePhase: Math.random() * Math.PI * 2,
+    });
+  }
+}
+
+function animateParticles() {
+  const ctx = particleCtx;
+  const w = particleCanvas.width;
+  const h = particleCanvas.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  particles.forEach((p) => {
+    // Update position
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rotation += p.rotationSpeed;
+
+    // Pulse opacity
+    p.pulsePhase += 0.01;
+    const pulse = Math.sin(p.pulsePhase) * 0.08;
+    const currentOpacity = Math.max(0.05, Math.min(0.5, p.opacity + pulse));
+
+    // Wrap around edges
+    if (p.y < -50) {
+      p.y = h + 50;
+      p.x = Math.random() * w;
+    }
+    if (p.x < -50) p.x = w + 50;
+    if (p.x > w + 50) p.x = -50;
+
+    // Draw
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.font = `bold ${p.size}px "Courier New", monospace`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = p.color + currentOpacity + ")";
+    ctx.fillText(p.symbol, 0, 0);
+    ctx.restore();
+  });
+
+  animFrameId = requestAnimationFrame(animateParticles);
+}
+
+// Start both systems on load
+document.addEventListener("DOMContentLoaded", () => {
+  initParticleSystem();
+  startTitleCycling();
+});

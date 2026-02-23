@@ -12,14 +12,13 @@ body {
   position: relative;
 }
 
-/* VIDEO BACKGROUND */
-#bgVideo {
+/* PARTICLE CANVAS BACKGROUND */
+#particleCanvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  object-fit: cover;
   z-index: -1;
   pointer-events: none;
 }
@@ -80,34 +79,20 @@ body {
 .game-title {
   font-size: clamp(2rem, 6vw, 4.5rem);
   font-weight: bold;
-  background: linear-gradient(90deg,
-      #87ceeb 0%,
-      #00bfff 20%,
-      #1e90ff 40%,
-      #9370db 60%,
-      #ba55d3 80%,
-      #87ceeb 100%);
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: rgba(255, 255, 255, 1);
   margin-bottom: 15px;
   letter-spacing: 2px;
-  animation: auroraFlow 4s ease-in-out infinite;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  transition: opacity 0.4s ease;
+  min-height: 1.2em;
 }
 
-@keyframes auroraFlow {
-  0% {
-    background-position: 0% 50%;
-  }
+.game-title.fade-out {
+  opacity: 0;
+}
 
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+.game-title.fade-in {
+  opacity: 1;
 }
 
 @keyframes floatingTitle {
