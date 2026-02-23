@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PuzzleFusion — a drag-and-drop puzzle game by BUCC" />
+  <title>PuzzleFusion - BUCC</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <video id="bgVideo" autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4" />
+  </video>
+
+  <!-- HOME SCREEN -->
+  <div id="homeScreen" class="screen active">
+    <img src="img/aura.png" alt="Aura" class="aura-image" loading="lazy" />
+
+    <div class="home-container">
+      <h1 class="game-title">PUZZLE_FUSION_V2</h1>
+      <p class="made-by">made in BUCC</p>
+      <button id="startBtn" class="btn-primary">START GAME</button>
+      <p class="instruction">
+        Press <span class="key">SPACE</span> to start the game
+      </p>
+    </div>
+
+    <!-- BUCC Logo Container -->
+    <div class="bucc-logo-container">
+      <img src="img/bucc_logo.png" alt="BUCC Logo" class="bucc-logo" loading="lazy" />
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS SCREEN -->
+  <div id="instructionsScreen" class="screen">
+    <div class="instructions-container">
+      <h2 class="screen-title">How to Play</h2>
+      <ul class="instructions-list">
+        <li>Drag and drop puzzles</li>
+        <li>Scroll down and select a picture you like</li>
+        <li>1 minute time limit</li>
+        <li>25 moves available</li>
+        <li>Take puzzles from the bottom tray</li>
+        <li>Put puzzle back in the tray if needed</li>
+        <li>Overlap will cost 2 moves</li>
+      </ul>
+      <button id="continueBtn" class="btn-primary">CONTINUE</button>
+    </div>
+  </div>
+
+  <!-- IMAGE SELECTION SCREEN -->
+  <div id="selectionScreen" class="screen">
+    <div class="selection-container">
+      <h2 class="screen-title">Choose A Picture</h2>
+      <div id="imageGrid" class="image-grid"></div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="gameScreen" class="screen">
+    <div class="game-container">
+      <div class="game-header">
+        <div class="stat-box">
+          <span class="stat-label">Time:</span>
+          <span id="timer" class="stat-value">60</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Moves Left:</span>
+          <span id="moveCounter" class="stat-value">25</span>
+        </div>
+      </div>
+
+      <div class="game-content">
+        <div id="piecesTray" class="pieces-tray">
+          <div id="piecesContainer" class="pieces-container"></div>
+        </div>
+
+        <div id="puzzleBoard" class="puzzle-board"></div>
+      </div>
+
+      <p class="quit-instruction">
+        Press <span class="key">ESC</span> to quit
+      </p>
+    </div>
+
+    <!-- Slice Animation Overlay -->
+    <div id="sliceOverlay" class="slice-overlay">
+      <div class="slice-animation-container">
+        <img id="selectedImagePreview" src="" alt="Selected Image" />
+
+        <div class="slice-lines-container" id="sliceLines">
+          <div class="slice-line vertical"></div>
+          <div class="slice-line vertical"></div>
+          <div class="slice-line horizontal"></div>
+          <div class="slice-line horizontal"></div>
+        </div>
+
+        <div id="sliceGrid" class="slice-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="resultScreen" class="screen">
+    <div class="result-container">
+      <h2 id="resultTitle" class="result-title">Congratulations!</h2>
+      <p id="resultMessage" class="result-message">Puzzle Solved!</p>
+      <div class="result-stats">
+        <p>Total Moves: <span id="finalMoves" class="highlight">0</span></p>
+        <p>Time Taken: <span id="finalTime" class="highlight">0s</span></p>
+      </div>
+      <button id="homeBtn" class="btn-primary">HOME</button>
+      <button id="playAgainBtn" class="btn-secondary">PLAY AGAIN</button>
+    </div>
+
+    <!-- BUCC Logo Container -->
+    <div class="bucc-logo-container">
+      <img src="img/bucc_logo.png" alt="BUCC Logo" class="bucc-logo" loading="lazy" />
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
