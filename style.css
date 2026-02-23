@@ -281,13 +281,35 @@ body {
   }
 }
 
+/* TOP BRANDING */
+.top-branding {
+  position: absolute;
+  top: clamp(10px, 2vh, 30px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  z-index: 5;
+}
+
 /* AURA IMAGE */
 .aura-image {
-  height: clamp(50px, 8vw, 90px);
-  width: auto;
+  width: clamp(80px, 12vw, 160px);
+  height: auto;
   pointer-events: none;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
-  transition: all 0.3s ease;
+}
+
+.event-text {
+  font-size: clamp(0.7rem, 1.5vw, 1.1rem);
+  color: rgba(255, 255, 255, 1);
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(135, 206, 250, 0.8);
+  text-align: center;
+  white-space: nowrap;
+  margin-top: -20px;
 }
 
 .bucc-logo {
