@@ -749,7 +749,7 @@ function clearChildren(element) {
 }
 
 // ═══════════════════════════════════════
-//  TITLE LANGUAGE CYCLING
+//  TITLE LANGUAGE CYCLING (Hacker Scramble)
 // ═══════════════════════════════════════
 
 const TITLE_VARIANTS = [
@@ -757,30 +757,74 @@ const TITLE_VARIANTS = [
   "拼图融合_V2",
   "পাজল_ফিউশন_V2",
   "0x50 55 5A 5A 4C 45",
-  "PUZZLE_FUSION_V2",
   "퍼즐_퓨전_V2",
   "パズル融合_V2",
+  "لغز_الدمج_V2",
   "01010000 01010101",
 ];
 
+const SCRAMBLE_CHARS =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*!?<>{}[]=/\\|~^拼图融合파즐퓨전パズルপাজলফিউশনلغزالدمج";
+
 let titleIndex = 0;
-let titleInterval = null;
+let scrambleTimer = null;
 
 function startTitleCycling() {
   const titleEl = document.querySelector(".game-title");
   if (!titleEl) return;
 
-  titleInterval = setInterval(() => {
-    titleEl.classList.add("fade-out");
-    titleEl.classList.remove("fade-in");
+  setInterval(() => {
+    titleIndex = (titleIndex + 1) % TITLE_VARIANTS.length;
+    scrambleTo(titleEl, TITLE_VARIANTS[titleIndex]);
+  }, 4500);
+}
 
-    setTimeout(() => {
-      titleIndex = (titleIndex + 1) % TITLE_VARIANTS.length;
-      titleEl.textContent = TITLE_VARIANTS[titleIndex];
-      titleEl.classList.remove("fade-out");
-      titleEl.classList.add("fade-in");
-    }, 400);
-  }, 2500);
+function scrambleTo(element, targetText) {
+  const targetChars = Array.from(targetText);
+  const len = targetChars.length;
+
+  // Start with all characters scrambled
+  let resolved = new Array(len).fill(false);
+  let display = new Array(len).fill("");
+  let iteration = 0;
+  const maxIterations = 12;
+
+  // Randomize initial display
+  for (let i = 0; i < len; i++) {
+    display[i] = randomScrambleChar();
+  }
+
+  if (scrambleTimer) clearInterval(scrambleTimer);
+
+  scrambleTimer = setInterval(() => {
+    iteration++;
+
+    // Resolve characters progressively from left to right
+    const resolveCount = Math.floor((iteration / maxIterations) * len);
+
+    for (let i = 0; i < len; i++) {
+      if (i < resolveCount) {
+        // This character is resolved
+        resolved[i] = true;
+        display[i] = targetChars[i];
+      } else {
+        // Still scrambling — rapid random character
+        display[i] = randomScrambleChar();
+      }
+    }
+
+    element.textContent = display.join("");
+
+    if (iteration >= maxIterations) {
+      clearInterval(scrambleTimer);
+      scrambleTimer = null;
+      element.textContent = targetText;
+    }
+  }, 70);
+}
+
+function randomScrambleChar() {
+  return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
 }
 
 // ═══════════════════════════════════════
@@ -804,14 +848,12 @@ const LANG_SYMBOLS = [
   "fn()", "[ ]", "&&", "!=", ">>>", "**",
 ];
 
-const RED_SHADES = [
-  "rgba(220, 38, 38, ",   // red-600
-  "rgba(239, 68, 68, ",   // red-500
-  "rgba(248, 113, 113, ", // red-400
-  "rgba(185, 28, 28, ",   // red-700
-  "rgba(252, 165, 165, ", // red-300
-  "rgba(255, 100, 80, ",  // coral red
-  "rgba(200, 50, 50, ",   // dark red
+const PARTICLE_COLORS = [
+  "rgba(255, 255, 255, ",   // white
+  "rgba(240, 240, 240, ",   // off-white
+  "rgba(220, 220, 220, ",   // light gray
+  "rgba(255, 245, 245, ",   // warm white
+  "rgba(250, 250, 255, ",   // cool white
 ];
 
 let particles = [];
@@ -861,7 +903,7 @@ function createParticles() {
         PARTICLE_CONFIG.MIN_OPACITY +
         Math.random() * (PARTICLE_CONFIG.MAX_OPACITY - PARTICLE_CONFIG.MIN_OPACITY),
       symbol: LANG_SYMBOLS[Math.floor(Math.random() * LANG_SYMBOLS.length)],
-      color: RED_SHADES[Math.floor(Math.random() * RED_SHADES.length)],
+      color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)],
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed: (Math.random() - 0.5) * 0.02,
       pulsePhase: Math.random() * Math.PI * 2,
