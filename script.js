@@ -1,6 +1,4 @@
-// ═══════════════════════════════════════
 //  CONFIG & STATE
-// ═══════════════════════════════════════
 
 const DEBUG = false;
 function log(...args) {
@@ -132,9 +130,7 @@ const availableImages = [
   },
 ];
 
-// ═══════════════════════════════════════
 //  CACHED DOM REFERENCES
-// ═══════════════════════════════════════
 
 const DOM = {};
 
@@ -154,9 +150,7 @@ function cacheDOMElements() {
   DOM.finalTime = document.getElementById("finalTime");
 }
 
-// ═══════════════════════════════════════
 //  INITIALIZATION
-// ═══════════════════════════════════════
 
 document.addEventListener("DOMContentLoaded", () => {
   log("Game initializing...");
@@ -169,9 +163,7 @@ function initializeGame() {
   showScreen("home");
 }
 
-// ═══════════════════════════════════════
 //  EVENT LISTENERS
-// ═══════════════════════════════════════
 
 function setupEventListeners() {
   document.getElementById("startBtn").addEventListener("click", () => {
@@ -200,9 +192,8 @@ function setupEventListeners() {
   });
 }
 
-// ═══════════════════════════════════════
+
 //  SCREEN NAVIGATION
-// ═══════════════════════════════════════
 
 function showScreen(screenName) {
   log("Showing screen:", screenName);
@@ -219,9 +210,7 @@ function showScreen(screenName) {
   }
 }
 
-// ═══════════════════════════════════════
 //  IMAGE SELECTION
-// ═══════════════════════════════════════
 
 function loadImageOptions() {
   clearChildren(DOM.imageGrid);
@@ -262,9 +251,7 @@ function selectImage(imageData, element) {
   startSliceAnimation(imageData);
 }
 
-// ═══════════════════════════════════════
 //  SLICE ANIMATION
-// ═══════════════════════════════════════
 
 function startSliceAnimation(imageData) {
   log("Starting slice animation for:", imageData.id);
@@ -274,7 +261,6 @@ function startSliceAnimation(imageData) {
   const sliceGrid = DOM.sliceGrid;
   const sliceLines = DOM.sliceLines;
 
-  // Reset everything first
   overlay.classList.remove("active");
   sliceGrid.classList.remove("show-slices", "shuffle", "move-to-tray");
   clearChildren(sliceGrid);
@@ -282,7 +268,6 @@ function startSliceAnimation(imageData) {
   preview.style.filter = "brightness(1)";
   preview.classList.remove("glow-white");
 
-  // Show overlay and start animation
   overlay.classList.add("active");
   preview.src = `${imageData.folder}/${imageData.mainImage}`;
 
@@ -364,9 +349,7 @@ function createSlicePieces(imageData, container) {
   container.appendChild(fragment);
 }
 
-// ═══════════════════════════════════════
 //  GAME BOARD SETUP
-// ═══════════════════════════════════════
 
 function initializeGameBoard(imageData) {
   log("Initializing game board");
@@ -463,9 +446,7 @@ function createPuzzlePieces(imageData) {
   log(`Created ${GAME_DEFAULTS.TOTAL_PIECES} puzzle pieces`);
 }
 
-// ═══════════════════════════════════════
 //  DRAG AND DROP
-// ═══════════════════════════════════════
 
 function handleDragStart(e) {
   if (!gameState.isGameActive) return;
@@ -526,9 +507,7 @@ function handleDrop(e) {
   gameState.draggedPiece = null;
 }
 
-// ═══════════════════════════════════════
 //  PIECE PLACEMENT
-// ═══════════════════════════════════════
 
 function placePieceInSlot(piece, slot) {
   log("Placing piece", piece.dataset.pieceIndex, "in slot", slot.dataset.slotIndex);
@@ -600,9 +579,7 @@ function returnPieceToTray(piece) {
   }
 }
 
-// ═══════════════════════════════════════
 //  TIMER
-// ═══════════════════════════════════════
 
 function startTimer() {
   if (gameState.timerInterval) {
@@ -632,9 +609,7 @@ function startTimer() {
   }, 1000);
 }
 
-// ═══════════════════════════════════════
 //  WIN / LOSE CHECKING
-// ═══════════════════════════════════════
 
 function checkPuzzleComplete() {
   const slots = gameState.boardSlots;
@@ -677,9 +652,7 @@ function showCompletionAnimation() {
   }, 2500);
 }
 
-// ═══════════════════════════════════════
 //  GAME END & RESET
-// ═══════════════════════════════════════
 
 function endGame(won) {
   log("Game ended. Won:", won);
@@ -731,9 +704,7 @@ function resetGame() {
   clearChildren(DOM.piecesContainer);
 }
 
-// ═══════════════════════════════════════
 //  UTILITIES
-// ═══════════════════════════════════════
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -748,9 +719,7 @@ function clearChildren(element) {
   }
 }
 
-// ═══════════════════════════════════════
 //  TITLE LANGUAGE CYCLING (Hacker Scramble)
-// ═══════════════════════════════════════
 
 const TITLE_VARIANTS = [
   "PUZZLE_FUSION_V2",
@@ -783,13 +752,11 @@ function scrambleTo(element, targetText) {
   const targetChars = Array.from(targetText);
   const len = targetChars.length;
 
-  // Start with all characters scrambled
   let resolved = new Array(len).fill(false);
   let display = new Array(len).fill("");
   let iteration = 0;
   const maxIterations = 12;
 
-  // Randomize initial display
   for (let i = 0; i < len; i++) {
     display[i] = randomScrambleChar();
   }
@@ -799,16 +766,13 @@ function scrambleTo(element, targetText) {
   scrambleTimer = setInterval(() => {
     iteration++;
 
-    // Resolve characters progressively from left to right
     const resolveCount = Math.floor((iteration / maxIterations) * len);
 
     for (let i = 0; i < len; i++) {
       if (i < resolveCount) {
-        // This character is resolved
         resolved[i] = true;
         display[i] = targetChars[i];
       } else {
-        // Still scrambling — rapid random character
         display[i] = randomScrambleChar();
       }
     }
@@ -827,9 +791,7 @@ function randomScrambleChar() {
   return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
 }
 
-// ═══════════════════════════════════════
 //  PARTICLE CANVAS BACKGROUND
-// ═══════════════════════════════════════
 
 const PARTICLE_CONFIG = {
   COUNT: 45,
@@ -943,7 +905,6 @@ function animateParticles() {
 
   ctx.clearRect(0, 0, w, h);
 
-  // Draw connection lines first (behind particles)
   drawConnections(ctx);
 
   particles.forEach((p) => {
@@ -980,7 +941,6 @@ function animateParticles() {
   animFrameId = requestAnimationFrame(animateParticles);
 }
 
-// Start both systems on load
 document.addEventListener("DOMContentLoaded", () => {
   initParticleSystem();
   startTitleCycling();
