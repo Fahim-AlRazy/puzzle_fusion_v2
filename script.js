@@ -194,15 +194,9 @@ function setupEventListeners() {
     loadImageOptions();
   });
 
-  document.getElementById("homeBtn").addEventListener("click", () => {
-    resetGame();
-    showScreen("home");
-  });
-
   document.getElementById("playAgainBtn").addEventListener("click", () => {
     resetGame();
-    showScreen("selection");
-    loadImageOptions();
+    showScreen("home");
   });
 }
 
